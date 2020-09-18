@@ -5,4 +5,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="*"/>
+    <PackageReference Include="Microsoft.Edge.SeleniumTools" Version="*"/>
+    <PackageReference Include="EPPlus" Version="*"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="*"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="*"/>
+  </ItemGroup>
+  
 </Project>

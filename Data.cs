@@ -9,7 +9,7 @@ namespace iDeskDataScraper
     {
         public DbSet<Incident> Incidents { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-                    => options.UseSqlite("Data Source=./data/iDeskData.db");
+                    => options.UseSqlite("Data Source=./files/data/iDeskData.db");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

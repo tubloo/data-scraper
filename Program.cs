@@ -34,7 +34,7 @@ namespace iDeskDataScraper
             edgeOptions.UseChromium = true;
             //edgeOptions.AddUserProfilePreference()
             //edgeOptions.AddArgument("headless");
-            IWebDriver _driver = new Microsoft.Edge.SeleniumTools.EdgeDriver("./drivers", edgeOptions);
+            IWebDriver _driver = new Microsoft.Edge.SeleniumTools.EdgeDriver("./files/drivers", edgeOptions);
 
             //Open Browser
             _driver.Url = url;
@@ -75,7 +75,7 @@ namespace iDeskDataScraper
             Console.WriteLine("Exporting Report Data to DB ...");
 
             //Read Excel
-            FileInfo excelReport = new FileInfo("./reports/Book.xlsx");
+            FileInfo excelReport = new FileInfo("./files/reports/Book.xlsx");
             using (ExcelPackage excelPackage = new ExcelPackage(excelReport))
             {
 
@@ -104,7 +104,7 @@ namespace iDeskDataScraper
             
             using (var db = new iDeskDbContext())
             {
-                db.Incidents.Add(new Incident { IncidentID = "INC003", Summary = "Test Summary" });
+                db.Incidents.Add(new Incident { IncidentID = "INC004", Summary = "Test Summary" });
                 db.SaveChanges();
 
                 foreach (var incident in db.Incidents)

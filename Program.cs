@@ -9,6 +9,7 @@ using OfficeOpenXml;
 /* TODO
 - Mapping of Excel to DB Columns
 - Handle Incident ID Primary Key Violation
+- Store Last Sync Date
 */
 
 namespace iDeskDataScraper
@@ -24,7 +25,6 @@ namespace iDeskDataScraper
             exportReportToDB();
 
         }
-
         static void downloadReport()
         {
             Console.WriteLine("Downloading Report ...");
@@ -79,39 +79,64 @@ namespace iDeskDataScraper
             using (ExcelPackage excelPackage = new ExcelPackage(excelReport))
             {
 
-                Console.WriteLine(excelReport.Name);
-                Console.WriteLine(excelPackage.Workbook.Worksheets.Count);
-
                 ExcelWorksheet firstSheet = excelPackage.Workbook.Worksheets[0];
 
-                Console.WriteLine("Sheet 1 Data");
-                Console.WriteLine($"Cell A2 Value   : {firstSheet.Cells["A1"].Text}");
-                Console.WriteLine($"Cell A2 Color   : {firstSheet.Cells["A1"].Style.Font.Color.LookupColor()}");
-                Console.WriteLine($"Cell B2 Formula : {firstSheet.Cells["A1"].Formula}");
-                Console.WriteLine($"Cell B2 Value   : {firstSheet.Cells["A1"].Text}");
-                Console.WriteLine($"Cell B2 Border  : {firstSheet.Cells["A1"].Style.Border.Top.Style}");
-                Console.WriteLine("");
+                Console.WriteLine("\nExcel ...");
+                Console.WriteLine("Total Rows - " + firstSheet.Dimension.Rows.ToString());
 
+                using (var db = new iDeskDbContext())
+                {
 
+                    
+                    for (int i = 1; i < firstSheet.Dimension.Rows; i++)
+                    {
+                        Console.WriteLine(firstSheet.Cells[i, 1].Text);
+
+                        Incident incident = new Incident();
+
+                        incident.IncidentID = firstSheet.Cells[i, 1].Text;
+                        incident.Summary = firstSheet.Cells[i, 2].Text;
+
+                        db.Incidents.Add(incident);
+                        
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+                        {
+                            db.Incidents.Update(incident);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    ControlParam control = new ControlParam();
+                    control.Key = "Last Executed On";
+                    control.Value = System.DateTime.Now.ToString();
+                    db.ControlParams.Update(control);
+                    db.SaveChanges();
+
+                }
             }
 
-            saveToDB();
+            PrintDB();
 
         }
 
-        static void saveToDB()
+        static void PrintDB()
         {
-            
+
+            Console.WriteLine("\nDatabase ..");
+
             using (var db = new iDeskDbContext())
             {
-                db.Incidents.Add(new Incident { IncidentID = "INC004", Summary = "Test Summary" });
-                db.SaveChanges();
+
 
                 foreach (var incident in db.Incidents)
                 {
                     Console.WriteLine(incident.IncidentID, incident.Summary);
                 }
-                    
+
             }
         }
     }

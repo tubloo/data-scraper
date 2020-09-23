@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.Edge.SeleniumTools;
 using OpenQA.Selenium;
@@ -87,18 +88,28 @@ namespace iDeskDataScraper
                 using (var db = new iDeskDbContext())
                 {
 
-                    
-                    for (int i = 1; i < firstSheet.Dimension.Rows; i++)
+
+                    for (int i = 2; i <= firstSheet.Dimension.Rows; i++)
                     {
                         Console.WriteLine(firstSheet.Cells[i, 1].Text);
 
                         Incident incident = new Incident();
 
-                        incident.IncidentID = firstSheet.Cells[i, 1].Text;
-                        incident.Summary = firstSheet.Cells[i, 2].Text;
+                        /*
+                        Iterate through class properties
+                        Assign Propert Value by Property Attribute Excel Position 
+                        */
+
+                        Type type = typeof(Incident);
+                        PropertyInfo[] properties = type.GetProperties();
+                        foreach (PropertyInfo property in properties)
+                        {
+                            property.SetValue(incident, firstSheet.Cells[i, property.GetCustomAttribute<ExcelColPos>().Colpos].Text);
+                        }
+
 
                         db.Incidents.Add(incident);
-                        
+
                         try
                         {
                             db.SaveChanges();

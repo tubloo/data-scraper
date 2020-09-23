@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -15,26 +14,46 @@ namespace iDeskDataScraper
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*modelBuilder.Entity<Blog>()
-                .HasMany(b => b.Posts)
-                .WithOne(p => p.Blog)
-                .HasForeignKey(p => p.BlogId);*/
-
-            modelBuilder.Entity<Incident>().HasKey(lc => new { lc.IncidentID });;
-            modelBuilder.Entity<ControlParam>().HasKey(lc => new { lc.Key });;
+            modelBuilder.Entity<Incident>().HasKey(lc => new { lc.IncidentID }); ;
+            modelBuilder.Entity<ControlParam>().HasKey(lc => new { lc.Key }); ;
         }
     }
 
     public class Incident
     {
-       public string IncidentID { get; set; }
+        [ExcelColPos(1)]
+        public string IncidentID { get; set; }
+        [ExcelColPos(2)]
         public string Summary { get; set; }
+        [ExcelColPos(3)]
+        public string ReportedDate { get; set; }
     }
+
 
     public class ControlParam
     {
-       public string Key { get; set; }
-       public string Value { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
 
     }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    class ExcelColPos : Attribute
+    {
+        private int colPos;
+
+        // Constructor 
+        public ExcelColPos(int colPos)
+        {
+            this.colPos = colPos;
+        }
+
+        public int Colpos
+        {
+            get { return colPos; }
+        }
+
+
+    }
+
 }

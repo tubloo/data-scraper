@@ -8,9 +8,7 @@ using OfficeOpenXml;
 
 
 /* TODO
-- Mapping of Excel to DB Columns
-- Handle Incident ID Primary Key Violation
-- Store Last Sync Date
+
 */
 
 namespace iDeskDataScraper
@@ -95,18 +93,12 @@ namespace iDeskDataScraper
 
                         Incident incident = new Incident();
 
-                        /*
-                        Iterate through class properties
-                        Assign Propert Value by Property Attribute Excel Position 
-                        */
-
                         Type type = typeof(Incident);
                         PropertyInfo[] properties = type.GetProperties();
                         foreach (PropertyInfo property in properties)
                         {
                             property.SetValue(incident, firstSheet.Cells[i, property.GetCustomAttribute<ExcelColPos>().Colpos].Text);
                         }
-
 
                         db.Incidents.Add(incident);
 
@@ -130,7 +122,7 @@ namespace iDeskDataScraper
                 }
             }
 
-            PrintDB();
+            //PrintDB();
 
         }
 

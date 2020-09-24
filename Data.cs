@@ -21,12 +21,12 @@ namespace iDeskDataScraper
 
     public class Incident
     {
-        [ExcelColPos(1)]
-        public string IncidentID { get; set; }
-        [ExcelColPos(2)]
-        public string Summary { get; set; }
-        [ExcelColPos(3)]
-        public string ReportedDate { get; set; }
+        [ExcelColPos(1)] public string IncidentID { get; set; }
+        [ExcelColPos(2)] public string Summary { get; set; }
+        [ExcelColPos(7)] public string ReportedDate { get; set; }
+        [ExcelColPos(2)] public string Status { get; set; }
+        [ExcelColPos(2)] public string Type { get; set; }
+        [ExcelColPos(2)] public string Service { get; set; }
     }
 
 

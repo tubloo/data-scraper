@@ -24,9 +24,10 @@ namespace iDeskDataScraper
         [ExcelColPos(1)] public string IncidentID { get; set; }
         [ExcelColPos(2)] public string Summary { get; set; }
         [ExcelColPos(7)] public string ReportedDate { get; set; }
-        [ExcelColPos(2)] public string Status { get; set; }
-        [ExcelColPos(2)] public string Type { get; set; }
-        [ExcelColPos(2)] public string Service { get; set; }
+        [ExcelColPos(5)] public string Status { get; set; }
+        [ExcelColPos(6)] public string Type { get; set; }
+        [ExcelColPos(13)] public string Service { get; set; }
+        [ExcelColPos(3)] public string Group { get; set; }
     }
 
 
